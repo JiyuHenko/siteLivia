@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agenda · Lívia Lopes</title>
+  <style>
+    :root{color-scheme:light;--paper:#f4f1ec;--ink:#262521;--line:#d7d1c8;--muted:#6e6b64;--accent:#706951}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 system-ui,sans-serif}main{max-width:1200px;margin:auto;padding:42px 24px 70px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line);padding-bottom:26px}.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:11px;color:var(--muted)}h1,h2{font:normal 38px/1.1 Georgia,serif;margin:12px 0}h2{font-size:28px}.intro{max-width:700px;color:var(--muted)}button,input,select,textarea{font:inherit}button{border:1px solid var(--ink);padding:12px 18px;background:var(--ink);color:white;cursor:pointer}button.secondary{background:transparent;color:var(--ink)}button:disabled{opacity:.45;cursor:wait}button:focus-visible,a:focus-visible{outline:3px solid #9d8549;outline-offset:4px}.toolbar{display:flex;gap:12px;align-items:center;margin:28px 0 12px}.toolbar select{max-width:230px}select,input,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:0;background:#fff;color:var(--ink)}#message{min-height:30px;margin:12px 0;color:var(--accent)}#message.error{color:#963e32}.layout{display:grid;grid-template-columns:1fr 1fr;gap:30px}#requests{display:grid;align-content:start;gap:10px}.request{width:100%;text-align:left;padding:19px;background:#fff;border:1px solid var(--line);color:var(--ink)}.request.selected{border-color:var(--ink);box-shadow:inset 3px 0 var(--ink)}.request strong{display:block;font-weight:500;font-size:17px}.request small{display:block;color:var(--muted);margin-top:4px}.badge{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:#ece8df;padding:3px 7px;float:right}.panel{background:#fff;padding:28px;border:1px solid var(--line);align-self:start;position:sticky;top:20px}.data{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted)}.field{display:block;margin:15px 0}.field>span{display:block;font-size:12px;letter-spacing:.04em;margin-bottom:6px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:15px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.notice{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:13px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:760px){main{padding:24px 16px}.layout{grid-template-columns:1fr}.panel{position:static}h1{font-size:31px}header{align-items:flex-start}.twocol{grid-template-columns:1fr}.panel{padding:20px}}
+  </style>
+</head>
+<body>
+<main>
+  <header><div><div class="eyebrow">Lívia Lopes · Beauty Artist</div><h1>Agenda do ateliê</h1></div><button class="secondary" id="refresh" type="button">Atualizar</button></header>
+  <p class="intro">Aqui chegam as preferências enviadas pelo site. Ajuste o horário e a duração, converse com a cliente e aprove quando estiver tudo combinado. Somente a aprovação cria o compromisso no Google Agenda.</p>
+  <div class="toolbar"><label for="filter">Exibir</label><select id="filter"><option value="PENDING">Pendentes</option><option value="APPROVED">Aprovadas</option><option value="DECLINED">Encerradas</option><option value="ALL">Todas</option></select></div>
+  <p id="message" role="status" aria-live="polite">Carregando solicitações…</p>
+  <div class="layout"><section id="requests" aria-label="Solicitações"></section><section class="panel" id="detail" hidden aria-label="Detalhes da solicitação">
+    <div class="eyebrow" id="reference"></div><h2 id="name"></h2><p class="data" id="summary"></p>
+    <p><a id="whatsapp" target="_blank" rel="noopener noreferrer">Conversar no WhatsApp ↗</a></p>
+    <p class="data" id="notes"></p>
+    <form id="decision">
+      <div class="twocol"><label class="field"><span>Data confirmada</span><input id="date" type="date" required></label><label class="field"><span>Horário confirmado</span><input id="time" type="time" required></label></div>
+      <label class="field"><span>Duração em minutos · inclui preparação e intervalo</span><input id="duration" type="number" min="30" max="720" step="15" value="90" required></label>
+      <label class="field"><span>Observação interna</span><textarea id="adminNote" rows="3" maxlength="1000"></textarea></label>
+      <div class="actions" id="actions"><button id="approve" type="submit">Aprovar e criar na agenda</button><button id="decline" class="secondary" type="button">Encerrar solicitação</button></div>
+    </form>
+    <p class="notice" id="notice">A aprovação verifica conflitos na agenda configurada. A cliente não recebe mensagem automática: confirme os detalhes com ela pelo WhatsApp.</p>
+  </section></div>
+  <p class="notice">Datas e horários em Brasília (America/Sao_Paulo). Para alterar ou cancelar um compromisso já aprovado, use o Google Agenda e avise a cliente. Alterações feitas diretamente no Agenda não são sincronizadas para este painel.</p>
+</main>
+<script>
+  'use strict';
+  const labels={noivas:'Noivas',debutantes:'Debutantes',social:'Maquiagem social',curso:'Automaquiagem presencial'};
+  const states={PENDING:'Pendente',APPROVED:'Aprovada',DECLINED:'Encerrada'};
+  const $=id=>document.getElementById(id);
+  let rows=[],selected=null,busy=false;
+  function message(text,error=false){$('message').textContent=text;$('message').classList.toggle('error',error);}
+  function setBusy(value){busy=value;['refresh','approve','decline'].forEach(id=>$(id).disabled=value);}
+  function fail(error){setBusy(false);message(error&&error.message?error.message:'Falha ao acessar os dados. Tente novamente.',true);}
+  function dateLabel(date){return date?date.split('-').reverse().join('/'):'—';}
+  function render(){
+    const filtered=rows.filter(row=>$('filter').value==='ALL'||row.status===$('filter').value);
+    $('requests').replaceChildren();
+    if(!filtered.length){const p=document.createElement('p');p.textContent='Nenhuma solicitação nesta categoria.';$('requests').append(p);}
+    filtered.forEach(row=>{
+      const button=document.createElement('button');button.type='button';button.className='request'+(selected&&selected.requestId===row.requestId?' selected':'');
+      const badge=document.createElement('span');badge.className='badge';badge.textContent=states[row.status]||row.status;
+      const name=document.createElement('strong');name.textContent=row.name;
+      const detail=document.createElement('small');detail.textContent=(labels[row.service]||row.service)+' · '+dateLabel(row.date)+' às '+row.time;
+      const ref=document.createElement('small');ref.textContent=row.reference;
+      button.append(badge,name,detail,ref);button.addEventListener('click',()=>{if(!busy)select(row);});$('requests').append(button);
+    });
+  }
+  function select(row){
+    selected=row;$('detail').hidden=false;$('reference').textContent=row.reference+' · '+states[row.status];$('name').textContent=row.name;
+    $('summary').textContent=(labels[row.service]||row.service)+'\nPreferência: '+dateLabel(row.date)+' às '+row.time+'\nWhatsApp: '+row.phone;
+    $('whatsapp').href='https://wa.me/'+row.phone.replace(/\D/g,'');
+    $('notes').textContent=row.notes?'Observações da cliente: '+row.notes:'Sem observações da cliente.';
+    $('date').value=row.confirmedDate||row.date;$('time').value=row.confirmedTime||row.time;$('duration').value=row.durationMinutes||90;$('adminNote').value=row.adminNote||'';
+    const pending=row.status==='PENDING';['date','time','duration','adminNote'].forEach(id=>$(id).disabled=!pending);$('actions').hidden=!pending;
+    $('notice').textContent=row.status==='APPROVED'?'Confirmada para '+dateLabel(row.confirmedDate)+' às '+row.confirmedTime+' · '+row.durationMinutes+' minutos. Gerencie alterações no Google Agenda.':row.status==='DECLINED'?'Solicitação encerrada. Nenhum compromisso foi criado.':'A aprovação verifica conflitos na agenda configurada. A cliente não recebe mensagem automática: confirme os detalhes com ela pelo WhatsApp.';
+    render();
+  }
+  function load(keepMessage=false){
+    setBusy(true);if(!keepMessage)message('Carregando solicitações…');
+    google.script.run.withSuccessHandler(data=>{
+      rows=data;setBusy(false);const next=selected&&rows.find(row=>row.requestId===selected.requestId);if(next)select(next);else{selected=null;$('detail').hidden=true;render();}
+      if(!keepMessage)message(rows.length+' solicitação(ões) no painel.');
+    }).withFailureHandler(fail).adminListRequests();
+  }
+  $('refresh').addEventListener('click',()=>load());$('filter').addEventListener('change',render);
+  $('decision').addEventListener('submit',event=>{
+    event.preventDefault();if(busy||!selected)return;
+    setBusy(true);message('Verificando a agenda e registrando a aprovação…');
+    google.script.run.withSuccessHandler(result=>{message(result.reference+' aprovada. Confirme os detalhes com a cliente pelo WhatsApp.');load(true);}).withFailureHandler(fail).adminApproveRequest({requestId:selected.requestId,date:$('date').value,time:$('time').value,durationMinutes:Number($('duration').value),adminNote:$('adminNote').value});
+  });
+  $('decline').addEventListener('click',()=>{
+    if(busy||!selected||!confirm('Encerrar esta solicitação sem criar compromisso?'))return;
+    setBusy(true);message('Encerrando solicitação…');
+    google.script.run.withSuccessHandler(result=>{message(result.reference+' encerrada.');load(true);}).withFailureHandler(fail).adminDeclineRequest({requestId:selected.requestId,adminNote:$('adminNote').value});
+  });
+  load();
+</script>
+</body>
+</html>

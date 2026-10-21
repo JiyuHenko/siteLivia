@@ -1,0 +1,14 @@
+{
+  "name": "livia-lopes-beauty",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site editorial estático de Lívia Lopes Beauty Artist",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check app.js && node --check config.js && node scripts/check.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test integrations/apps-script/tests/booking.test.cjs integrations/apps-script/tests/frontend.test.cjs"
+  },
+  "engines": { "node": ">=20" }
+}
