@@ -1,5 +1,6 @@
-import { cp, mkdir, rm, lstat, realpath } from 'node:fs/promises';
+import { cp, mkdir, rm, lstat, realpath, readdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
+await import('./render-pages.mjs');
 
 // A static artifact: no backend, package install or CI build required for hosting.
 const root = await realpath('.');
@@ -10,5 +11,6 @@ if (existing?.isSymbolicLink()) throw new Error('Refusing to replace a linked ou
 console.log(`Diretório verificado para a compilação: ${output}`);
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const file of ['index.html', 'styles.css', 'app.js', 'config.js', 'assets', 'robots.txt']) await cp(file, resolve(output, file), { recursive: true });
+const publicFiles = (await readdir('.')).filter((name) => /\.(html|css|js)$/.test(name));
+for (const file of [...publicFiles, 'assets', 'robots.txt', 'sitemap.xml', '.nojekyll']) await cp(file, resolve(output, file), { recursive: true });
 console.log('Site estático pronto em dist/. Nenhum GitHub Action executado.');

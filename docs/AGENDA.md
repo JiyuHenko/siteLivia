@@ -29,6 +29,8 @@ O site é estático. Este complemento opcional recebe preferências, grava uma s
 | `SITE_ORIGIN` | Origem exata do site, por exemplo `https://www.seudominio.com.br`, sem barra final ou caminho |
 | `DAILY_REQUEST_LIMIT` | Opcional; padrão `100`; inteiro entre `1` e `1000` |
 
+Para o endereço atual `https://jiyuhenko.github.io/siteLivia/`, defina `SITE_ORIGIN` como **`https://jiyuhenko.github.io`**. O caminho `/siteLivia` não faz parte da origem usada pelo `postMessage`.
+
 6. No editor, selecione e execute **`prepararPlanilha_`** uma vez com a conta autorizada. Conceda os acessos solicitados. A função cria a aba `Solicitacoes`, os cabeçalhos e o fuso da planilha. Ela não sobrescreve dados existentes; rejeita cabeçalhos incompatíveis.
 7. Use duas implantações distintas de aplicativo da Web, do **mesmo projeto**, conforme abaixo. Sem usar GitHub Actions, sem backend próprio e sem serviço de envio de mensagens.
 

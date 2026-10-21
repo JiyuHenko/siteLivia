@@ -6,7 +6,8 @@
   "description": "Site editorial estático de Lívia Lopes Beauty Artist",
   "scripts": {
     "dev": "node scripts/serve.mjs",
-    "check": "node --check app.js && node --check config.js && node scripts/check.mjs",
+    "pages": "node scripts/render-pages.mjs",
+    "check": "node scripts/render-pages.mjs && node --check app.js && node --check config.js && node scripts/check.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --test integrations/apps-script/tests/booking.test.cjs integrations/apps-script/tests/frontend.test.cjs"
   },

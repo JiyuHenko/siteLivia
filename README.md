@@ -1,6 +1,6 @@
 # Lívia Lopes · Beauty Artist
 
-Site editorial em português para a maquiadora Lívia Lopes, em Passos/MG. Construído com HTML, CSS e JavaScript, fotos reais dos materiais fornecidos e fontes locais. Sem dependências de produção, framework ou serviço pago necessário para navegar no site.
+Site editorial em português para a maquiadora Lívia Lopes, em Passos/MG. Construído com HTML, CSS e JavaScript, fotos reais dos materiais fornecidos e fontes locais. Sem dependências de produção ou framework. Publicado no [GitHub Pages](https://jiyuhenko.github.io/siteLivia/).
 
 ## Rodar localmente
 
@@ -22,12 +22,14 @@ O build apenas copia os arquivos públicos para `dist/`. A pasta contém tudo qu
 
 ## A experiência
 
-- Noivas, debutantes e maquiagem social com conteúdo próprio em abas acessíveis por teclado.
+- Home com experiências acessíveis por teclado e links para páginas completas de noivas, debutantes e maquiagem social.
 - Apresentação da Lívia e seção do curso presencial de automaquiagem.
-- Portfólio com filtros, ampliação e navegação por setas.
-- Menu responsivo, perguntas frequentes, endereço, mapa, Instagram e WhatsApp.
+- Página própria do curso presencial de automaquiagem e navegação entre experiências.
+- [Galeria](https://jiyuhenko.github.io/siteLivia/galeria.html) com 24 fotos reais, filtros por categoria, ampliação e navegação por setas.
+- Menu responsivo, perguntas frequentes, endereço e mapa Google integrado com link para traçar a rota.
+- Ícones vetoriais para WhatsApp, Instagram, localização e contato; sem glifos decorativos ou emojis dependentes da plataforma.
 - Formulário que prepara uma mensagem para o WhatsApp enquanto a integração Google estiver desativada.
-- Animações de entrada, fotografias e interação, com respeito à preferência por movimento reduzido.
+- Animações de entrada, transições de fotografias e parallax da foto de casamento. A introdução das dúvidas acompanha o scroll no desktop; no celular mantém a leitura normal. Todos os movimentos respeitam a preferência por movimento reduzido.
 - Contato, aviso de privacidade, metadados sociais e dados estruturados locais.
 
 Solicitar um horário nunca é apresentado como confirmação de reserva. A mensagem só é enviada pelo WhatsApp quando a visitante confirma no aplicativo. Nenhuma mensagem é disparada automaticamente.
@@ -37,12 +39,16 @@ Solicitar um horário nunca é apresentado como confirmação de reserva. A mens
 | Arquivo | Conteúdo |
 | --- | --- |
 | `index.html` | Estrutura, textos, contatos, perguntas e metadados |
+| `pages/*.html` | Fragmentos editáveis das quatro experiências e da galeria |
 | `app.js` | Textos das três experiências, filtros, diálogos e formulário |
-| `styles.css` | Identidade visual, responsividade e movimentos |
-| `config.js` | Número público de WhatsApp e URL opcional de pré-agendamento |
+| `styles.css`, `refinements.css` | Identidade visual, refinamentos, mapa, contato e movimentos |
+| `services.css`, `gallery-page.css` | Estilos das páginas de serviços e da galeria |
+| `config.js` | URL pública, WhatsApp e URL opcional de pré-agendamento |
 | `assets/` | Fotografias, logos, imagem de compartilhamento e fontes locais |
 
-As fotos da própria Lívia usadas na biografia e no curso foram identificadas pelo proprietário. Trabalhos de debutantes vêm do portfólio de debutantes. [A procedência dos arquivos está documentada](docs/ASSETS.md). Imagens de referência e mockups do manual de branding não foram apresentados como clientes reais.
+Edite as páginas internas em `pages/`, depois execute `npm run pages` para atualizar os HTMLs completos na raiz. O gerador reutiliza cabeçalho, rodapé, ícones e formulários de `index.html`. Os documentos gerados são versionados: o visitante e o GitHub Pages não precisam executar Node. O endereço público fica em `config.js`; o gerador também atualiza metadados e `sitemap.xml`.
+
+As fotos da própria Lívia usadas na biografia e no curso foram identificadas pelo proprietário. Trabalhos de debutantes vêm do portfólio de debutantes. A procedência está documentada em [ASSETS.md](docs/ASSETS.md) e [GALERIA-ASSETS.md](docs/GALERIA-ASSETS.md); fotos adicionais de serviços também estão identificadas nos comentários dos fragmentos. Imagens de referência e mockups do manual de branding não foram apresentados como clientes reais.
 
 Os preços dos PDFs não foram publicados: o de debutantes é edição 2026 e o de noivas é edição 2027. O site pede uma proposta para a data da cliente. O curso não anuncia duração, programa, quantidade de vagas ou preço que ainda não foram confirmados.
 
@@ -60,19 +66,19 @@ Há validação no servidor, proteção contra fórmulas em células, controle d
 
 ## Hospedagem e GitHub Actions
 
-Não há workflows em `.github/workflows`, nem Actions necessárias para desenvolver, testar ou gerar a pasta pública. As alterações iniciais podem ser publicadas em um único commit consolidado.
+Não há workflows próprios em `.github/workflows`, nem Actions necessárias para desenvolver, testar ou gerar a pasta pública. O GitHub Pages já foi configurado pelo proprietário. Os arquivos completos na raiz permitem publicar pelo branch `main`, pasta `/ (root)`, com `.nojekyll`. O GitHub pode executar seu fluxo padrão de publicação do Pages a cada push; não foram adicionados pipelines extras.
 
 Qualquer hospedagem de arquivos estáticos serve o conteúdo de `dist/`. Para testar a pasta de produção localmente, use `node scripts/serve.mjs --dist` com a outra prévia parada ou em outra porta. Em hospedagens com configuração de build, o comando é `npm run build` e o diretório de publicação é `dist`.
 
-Para publicar sem executar um pipeline a cada alteração, faça o upload de `dist/` no provedor escolhido. Se preferir deploy conectado ao GitHub, configure apenas o fluxo de produção que deseja usar. A prévia de revisão usa hospedagem privada do Sites, vinculada em `.openai/hosting.json`; não usa o GitHub Actions. Nenhum domínio personalizado ou plano pago de hospedagem foi contratado.
+Concentre as alterações, execute a geração e as verificações localmente e faça um único push quando estiverem prontas. A configuração da antiga prévia privada foi removida a pedido do proprietário; este repositório usa GitHub Pages. Nenhum domínio ou serviço pago foi contratado.
 
-Os metadados absolutos usam o endereço da prévia privada. Quando o domínio definitivo for definido, ajuste `og:image`, `og:url` e a URL canônica em `index.html`, e configure `SITE_ORIGIN` no Apps Script. Todos os caminhos de assets são relativos, então o site também funciona em uma subpasta.
+Os metadados usam `https://jiyuhenko.github.io/siteLivia/`. Ao mudar de endereço, atualize `url` em `config.js`, execute `npm run pages` e ajuste a linha `Sitemap` de `robots.txt`. No Apps Script, `SITE_ORIGIN` é somente a origem: para esse endereço, use `https://jiyuhenko.github.io`, sem `/siteLivia`. Os caminhos de arquivos são relativos para preservar o funcionamento na subpasta do GitHub Pages.
 
 [Veja o registro da verificação local e os limites dos testes](docs/VALIDACAO.md).
 
 ## Dados e manutenção
 
-O site não instala analytics, cookies de publicidade, pixels ou armazenamento local com dados de clientes. Os formulários são enviados somente ao WhatsApp ou à URL pública do Apps Script que você configurar. Os links externos usam `noopener noreferrer`.
+O site não instala analytics, pixels ou armazenamento local com dados de clientes. O mapa integrado carrega conteúdo do Google e está sujeito às políticas desse serviço. Os formulários são enviados somente ao WhatsApp ou à URL pública do Apps Script que você configurar. Os links externos usam `noopener noreferrer`.
 
 O painel não envia confirmações automáticas e não traz de volta para a planilha alterações feitas diretamente no Google Agenda. A documentação da agenda descreve os limites e os ensaios necessários antes de uso real.
 

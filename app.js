@@ -8,6 +8,7 @@ const arrow = '<svg aria-hidden="true"><use href="#diagonal"/></svg>';
 // Every photograph and service description comes from the supplied portfolios.
 const experiences = {
   noivas: {
+    page: 'noivas.html',
     image: 'noivas.webp', alt: 'Noiva de vestido e véu com maquiagem de Lívia Lopes',
     label: 'PARA O SEU SIM', index: 'THE BRIDAL EXPERIENCE / 01',
     title: 'Você, em sua<br>versão mais <em>sua.</em>',
@@ -16,6 +17,7 @@ const experiences = {
     cta: 'Vamos falar sobre o seu grande dia',
   },
   debutantes: {
+    page: 'debutantes.html',
     image: 'debutantes.webp', alt: 'Debutante em vestido azul em sua festa de quinze anos',
     label: 'UM NOVO CAPÍTULO', index: 'EXPERIÊNCIA DEBUTANTE / 02',
     title: 'Sua noite.<br>Sua <em>essência.</em>',
@@ -24,6 +26,7 @@ const experiences = {
     cta: 'Vamos planejar a sua beleza',
   },
   social: {
+    page: 'maquiagem-social.html',
     image: 'social.webp', alt: 'Maquiagem social com olhos definidos e pele luminosa por Lívia Lopes',
     label: 'PARA CELEBRAR A VIDA', index: 'BELEZA SOCIAL / 03',
     title: 'Ocasiões especiais.<br>Beleza <em>de verdade.</em>',
@@ -47,7 +50,7 @@ $$('.reveal').forEach((element) => observer ? observer.observe(element) : elemen
 const tabs = $$('[role="tab"]');
 function selectExperience(service, focus = false) {
   const experience = experiences[service];
-  if (!experience) return;
+  if (!experience || !$('#experience-panel')) return;
   tabs.forEach((tab) => {
     const selected = tab.dataset.service === service;
     tab.setAttribute('aria-selected', String(selected));
@@ -68,6 +71,7 @@ function selectExperience(service, focus = false) {
   }));
   $('#experience-book').innerHTML = experience.cta + arrow;
   $('#experience-book').dataset.book = service;
+  if ($('#experience-learn')) $('#experience-learn').href = `./${experience.page}`;
   $('#experience-panel').setAttribute('aria-labelledby', `tab-${service}`);
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     [photo, $('.experience-content')].forEach((element, index) => {
@@ -93,7 +97,7 @@ tabs.forEach((tab, index) => {
 });
 function readExperienceHash() {
   const service = location.hash.slice(1);
-  if (experiences[service]) {
+  if (experiences[service] && $('#experiencias') && $('#experience-panel')) {
     selectExperience(service);
     $('#experiencias').scrollIntoView({ behavior: 'instant', block: 'start' });
   }
@@ -122,10 +126,22 @@ document.addEventListener('click', (event) => {
 document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(true); });
 window.matchMedia('(min-width: 801px)').addEventListener('change', ({ matches }) => { if (matches) closeMenu(); });
 
+const experienceMenus = $$('.nav-experiences');
+document.addEventListener('click', (event) => experienceMenus.forEach((menu) => {
+  if (!menu.contains(event.target)) menu.open = false;
+}));
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  experienceMenus.forEach((menu) => {
+    if (menu.open && menu.contains(document.activeElement)) $('summary', menu).focus();
+    menu.open = false;
+  });
+});
+
 // Native dialog focus is restored to the control that opened it.
 const dialogOpeners = new WeakMap();
 function openDialog(dialog, opener) {
-  if (dialog.open) return;
+  if (!dialog || dialog.open) return;
   const target = opener || document.activeElement;
   dialogOpeners.set(dialog, target?.getClientRects().length ? target : menuToggle);
   dialog.showModal();
@@ -141,7 +157,7 @@ $$('dialog').forEach((dialog) => {
   dialog.addEventListener('close', () => {
     const opener = dialogOpeners.get(dialog);
     const target = opener?.getClientRects().length ? opener : menuToggle;
-    target.focus({ preventScroll: true });
+    target?.focus({ preventScroll: true });
   });
 });
 $$('[data-privacy]').forEach((button) => button.addEventListener('click', () => openDialog($('#privacy-dialog'), button)));
@@ -149,7 +165,8 @@ $$('[data-privacy]').forEach((button) => button.addEventListener('click', () => 
 // Filter and lightbox use the same visible set, including keyboard navigation.
 const galleryItems = $$('.gallery-item');
 const filters = $$('[data-filter]');
-filters.forEach((button) => button.addEventListener('click', () => {
+function filterGallery(button, updateUrl = true) {
+  if (!button || !$('#gallery')) return;
   const filter = button.dataset.filter;
   filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
   $('#gallery').classList.toggle('is-filtered', filter !== 'all');
@@ -157,7 +174,20 @@ filters.forEach((button) => button.addEventListener('click', () => {
     item.hidden = filter !== 'all' && item.dataset.category !== filter;
     if (!item.hidden) item.classList.add('is-visible');
   });
-}));
+  const visibleCount = galleryItems.filter((item) => !item.hidden).length;
+  if ($('#gallery-count')) $('#gallery-count').textContent = `${String(visibleCount).padStart(2, '0')} fotografias`;
+  if (updateUrl && document.body.classList.contains('gallery-page')) {
+    const url = new URL(location.href);
+    if (filter === 'all') url.searchParams.delete('categoria');
+    else url.searchParams.set('categoria', filter);
+    history.replaceState(null, '', url);
+  }
+}
+filters.forEach((button) => button.addEventListener('click', () => filterGallery(button)));
+if (filters.length) {
+  const requested = new URLSearchParams(location.search).get('categoria');
+  filterGallery(filters.find((button) => button.dataset.filter === requested) || filters[0], false);
+}
 const lightbox = $('#lightbox');
 let lightboxIndex = 0;
 let lightboxItems = [];
@@ -179,9 +209,9 @@ galleryItems.forEach((item) => item.addEventListener('click', () => {
   updateLightbox();
   openDialog(lightbox, item);
 }));
-$('.lightbox-prev').addEventListener('click', () => stepLightbox(-1));
-$('.lightbox-next').addEventListener('click', () => stepLightbox(1));
-lightbox.addEventListener('keydown', (event) => {
+$('.lightbox-prev')?.addEventListener('click', () => stepLightbox(-1));
+$('.lightbox-next')?.addEventListener('click', () => stepLightbox(1));
+lightbox?.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
     stepLightbox(event.key === 'ArrowRight' ? 1 : -1);
@@ -207,6 +237,7 @@ function updateBookingMode() {
   bookingForm.elements.date.required = !course;
   bookingForm.elements.time.required = !course;
   $('#submit-label').textContent = usesOnlineBooking() ? 'Solicitar meu horário' : 'Continuar no WhatsApp';
+  $('.submit-button svg use')?.setAttribute('href', usesOnlineBooking() ? '#arrow' : '#whatsapp');
   $('#booking-notice').textContent = usesOnlineBooking()
     ? 'Esta é uma solicitação de pré-agendamento. A data e o horário dependem da confirmação pessoal da Lívia.'
     : course
@@ -222,7 +253,8 @@ $$('[data-book]').forEach((button) => button.addEventListener('click', () => {
     status.textContent = '';
     status.classList.remove('is-error');
     // A visitor may keep typing across dialog openings; only their chosen service changes.
-    if (button.dataset.book) serviceField.value = button.dataset.book;
+    const service = button.dataset.book || document.body.dataset.service;
+    if (service) serviceField.value = service;
     updateBookingMode();
   }
   openDialog(bookingDialog, button);
@@ -248,7 +280,7 @@ function showResult(title, text, url) {
   result.hidden = false;
   $('h3', result).innerHTML = title;
   $('#booking-result-text').textContent = text;
-  $('.result-symbol', result).textContent = url ? '↗' : '✓';
+  $('.result-symbol', result).innerHTML = `<svg aria-hidden="true"><use href="#${url ? 'whatsapp' : 'check'}"/></svg>`;
   $('.whatsapp-reopen', result)?.remove();
   if (url) {
     const link = document.createElement('a');
@@ -369,7 +401,8 @@ bookingForm.addEventListener('submit', async (event) => {
     status.classList.add('is-error');
     const fallback = document.createElement('a');
     fallback.href = whatsappUrl(fields); fallback.target = '_blank'; fallback.rel = 'noopener noreferrer';
-    fallback.textContent = ' Continuar pelo WhatsApp ↗'; fallback.style.textDecoration = 'underline';
+    fallback.textContent = 'Continuar pelo WhatsApp '; fallback.style.textDecoration = 'underline';
+    fallback.insertAdjacentHTML('beforeend', arrow);
     status.append(fallback);
   } finally {
     pendingSubmission = false;
@@ -378,3 +411,40 @@ bookingForm.addEventListener('submit', async (event) => {
 });
 updateBookingMode();
 $('#year').textContent = new Date().getFullYear();
+
+// A translated image layer gives Safari the same motion as desktop browsers.
+// Only visible sections are measured, and reduced motion always gets a still image.
+const parallaxSections = $$('[data-parallax]');
+if (parallaxSections.length) {
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const activeSections = new Set();
+  let scheduledFrame = 0;
+  const paintParallax = () => {
+    scheduledFrame = 0;
+    if (motionPreference.matches) {
+      parallaxSections.forEach((section) => section.style.removeProperty('--parallax-y'));
+      return;
+    }
+    const viewportHeight = window.innerHeight;
+    const distance = window.innerWidth <= 560 ? 90 : 150;
+    activeSections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      const progress = Math.max(-0.5, Math.min(0.5, (viewportHeight / 2 - rect.top - rect.height / 2) / (viewportHeight + rect.height)));
+      section.style.setProperty('--parallax-y', `${(progress * distance).toFixed(2)}px`);
+    });
+  };
+  const scheduleParallax = () => {
+    if (!scheduledFrame) scheduledFrame = requestAnimationFrame(paintParallax);
+  };
+  if ('IntersectionObserver' in window) {
+    const visibility = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => isIntersecting ? activeSections.add(target) : activeSections.delete(target));
+      scheduleParallax();
+    }, { rootMargin: '150px' });
+    parallaxSections.forEach((section) => visibility.observe(section));
+  } else parallaxSections.forEach((section) => activeSections.add(section));
+  window.addEventListener('scroll', scheduleParallax, { passive: true });
+  window.addEventListener('resize', scheduleParallax, { passive: true });
+  motionPreference.addEventListener('change', scheduleParallax);
+  scheduleParallax();
+}
