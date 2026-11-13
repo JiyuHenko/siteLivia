@@ -16,6 +16,7 @@ Pasta do Google Drive fornecida: https://drive.google.com/drive/folders/1eilylSH
 | `assets/portfolio-social-1.webp` | 1100 × 1650 | [C8CA64D1-7CC3-4E53-9AA4-F73959D2145B.jpg](https://drive.google.com/file/d/1bpQGQ8LwjjN74E1KcxCDIuL5GG0z1vAH/view) — Google Drive |
 | `assets/portfolio-social-2.webp` | 1100 × 1649 | [245E4BEF-55AE-43AD-9F3B-F0663164E46D.JPG](https://drive.google.com/file/d/1VHTgAnjWSfKwG1jLQrRxO0Z9TT1uy8n8/view) — Google Drive |
 | `assets/momento.webp` | 2000 × 1333 | [IMG_5362.JPG](https://drive.google.com/file/d/1QZDARhirJJvg5VycYah0cnrP6OoL7nFA/view) — Google Drive |
+| `assets/estudio-livia.webp` | 800 × 1200 | Portfólio de noivas de Lívia Lopes, página 5: foto do estúdio recortada para retirar a interface da captura, sem retoque. |
 | `assets/debutantes.webp` | 853 × 1280 | LIVIA LOPES PORTFOLIO DEPUTANTE.pdf: `p06_02_X7.jpg` |
 | `assets/portfolio-debutante-1.webp` | 1100 × 1650 | LIVIA LOPES PORTFOLIO DEPUTANTE.pdf: `p07_04_X9.jpg` |
 | `assets/portfolio-debutante-2.webp` | 1100 × 1649 | LIVIA LOPES PORTFOLIO DEPUTANTE.pdf: `p05_01_X7.png` |
