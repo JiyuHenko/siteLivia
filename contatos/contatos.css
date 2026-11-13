@@ -41,7 +41,7 @@
 .bio-tag-anchor {
   position: absolute;
   right: -20px;
-  bottom: 5%;
+  bottom: 2%;
   width: 22%;
   pointer-events: none;
 }
@@ -81,6 +81,7 @@
   transform: translateX(-50%);
 }
 .bio-portrait-mark {
+  --bio-tag-depth: -12deg;
   position: relative;
   display: grid;
   place-items: center;
@@ -91,7 +92,7 @@
   border-radius: 3px;
   box-shadow: inset 0 1px #fff8, 1px 2px #bdae97, 3px 6px 12px #30251b42;
   transform-origin: 50% 10%;
-  transform: perspective(300px) rotateY(-12deg);
+  transform: perspective(300px) rotateY(var(--bio-tag-depth));
 }
 .bio-portrait-mark::before {
   content: "";
@@ -111,8 +112,16 @@
   height: auto;
 }
 @media (prefers-reduced-motion: no-preference) {
+  /* The hit area stays still while the label swings under the pointer. */
+  .bio-tag-anchor::before {
+    content: "";
+    position: absolute;
+    inset: 23% -4px -4px;
+    z-index: 1;
+    pointer-events: auto;
+  }
   .bio-tag-pendulum { transform: rotate(calc(-4deg + var(--bio-tag-swing, 0deg))); }
-  .bio-portrait-mark { transform: perspective(300px) rotateY(calc(-12deg + var(--bio-tag-swing, 0deg) * .5)); }
+  .bio-portrait-mark { transform: perspective(300px) rotateY(calc(var(--bio-tag-depth) + var(--bio-tag-swing, 0deg) * .5)); }
 }
 .bio-intro { display: grid; justify-items: center; min-width: 0; text-align: center; padding-top: 23px; }
 .bio-kicker { margin: 0; font: 650 10px/1.45 var(--sans); text-transform: uppercase; letter-spacing: .16em; color: var(--bio-muted); }
@@ -261,7 +270,16 @@
     margin: 0 0 30px; padding: 0 2px 27px; border-bottom: 1px solid var(--bio-line);
   }
   .bio-portrait { width: min(100%, 190px); aspect-ratio: 5 / 6; }
-  .bio-tag-anchor { right: -5px; }
+  .bio-tag-anchor { right: -5px; bottom: 0; }
+  .bio-tag-anchor::after { box-shadow: inset 0 0 0 1px #9c876b, 0 1px 2px #30251b40; }
+  .bio-tag-pendulum::after { box-shadow: 0 1px 2px #30251b40; }
+  .bio-portrait-mark {
+    --bio-tag-depth: -8deg;
+    background: linear-gradient(155deg, #fffcf6, #f0e7d8);
+    border-color: #a48c6c55;
+    border-radius: 2px 2px 5px 4px;
+    box-shadow: inset 0 1px #fffb, 0 2px 6px #30251b30;
+  }
   .bio-intro { padding-top: 0; }
   .bio-kicker { font-size: 9px; letter-spacing: .11em; }
   .bio-logo { margin: 8px 0 0; transform: translateX(clamp(5px, 10vw - 27px, 12px)); }
@@ -299,7 +317,7 @@
 @media (max-width: 360px) {
   .bio-page { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
   .bio-profile { gap: 10px; }
-  .bio-tag-anchor { right: 2px; bottom: 0; }
+  .bio-tag-anchor { right: 2px; bottom: -2%; }
   .bio-service-title { font-size: 23px; }
   .bio-service-main { gap: 7px; }
   .bio-thumb { width: 37px; height: 48px; }

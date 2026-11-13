@@ -1,4 +1,5 @@
 const tag = document.querySelector('.bio-tag-pendulum');
+const anchor = tag.parentElement;
 const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
 const narrowScreen = window.matchMedia('(max-width: 740px)');
 let angle = 0;
@@ -38,7 +39,13 @@ function swing(time) {
   frame = window.requestAnimationFrame(swing);
 }
 
-function pushTag() {
+function nudgeTag(impulse) {
+  const maxVelocity = narrowScreen.matches ? 82 : 110;
+  velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity + impulse));
+  if (!frame) frame = window.requestAnimationFrame(swing);
+}
+
+function pushTagFromScroll() {
   const scroll = window.scrollY;
   const distance = scroll - lastScroll;
   lastScroll = scroll;
@@ -47,11 +54,24 @@ function pushTag() {
   const { top, bottom } = tag.getBoundingClientRect();
   if (bottom <= 0 || top >= window.innerHeight) return;
 
-  const maxVelocity = narrowScreen.matches ? 82 : 110;
-  velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity + distance * 2.5));
-  if (!frame) frame = window.requestAnimationFrame(swing);
+  nudgeTag(distance * 2.5);
 }
 
-window.addEventListener('scroll', pushTag, { passive: true });
+function pushTagFromPointer(event) {
+  if (!motion.matches) return;
+  const { left, width } = anchor.getBoundingClientRect();
+  const direction = event.clientX < left + width / 2 ? -1 : 1;
+  nudgeTag(direction * 80);
+}
+
+anchor.addEventListener('pointerenter', (event) => {
+  if (event.pointerType === 'mouse') pushTagFromPointer(event);
+});
+anchor.addEventListener('pointerup', (event) => {
+  if (event.isPrimary && (event.pointerType === 'touch' || event.pointerType === 'pen')) {
+    pushTagFromPointer(event);
+  }
+});
+window.addEventListener('scroll', pushTagFromScroll, { passive: true });
 window.addEventListener('pageshow', resetSwing);
 motion.addEventListener('change', resetSwing);
