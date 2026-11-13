@@ -116,7 +116,7 @@ svg { pointer-events: none; }
 .contact-baseline > a { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; min-height: 30px; }
 .contact-baseline svg { width: 17px; height: 17px; }
 .footer-page-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 34px; margin: 0 0 45px; }
-.footer-page-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 11px; }
+.footer-page-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
 .footer-page-links a:hover { text-decoration: underline; text-underline-offset: 5px; }
 
 @media (max-width: 1100px) {
@@ -217,7 +217,6 @@ svg { pointer-events: none; }
   .contact-baseline > span { display: block; font-size: 8px; }
   .contact-baseline > a { font-size: 12px; margin-top: 12px; min-height: 35px; }
   .footer-page-links { gap: 0 22px; margin-bottom: 30px; }
-  .footer-page-links a { font-size: 11px; }
   .lightbox-prev, .lightbox-next { width: 44px; height: 44px; bottom: 21px; }
   .lightbox-prev { left: calc(50% - 54px); }
   .lightbox-next { right: calc(50% - 54px); }
