@@ -1,6 +1,6 @@
 # Lívia Lopes · Beauty Artist
 
-Site editorial em português para a maquiadora Lívia Lopes, em Passos/MG. Construído com HTML, CSS e JavaScript, fotos reais dos materiais fornecidos e fontes locais. Sem dependências de produção ou framework. Publicado no [GitHub Pages](https://jiyuhenko.github.io/siteLivia/).
+Site editorial em português para a maquiadora Lívia Lopes, em Passos/MG. Construído com HTML, CSS e JavaScript, fotos reais dos materiais fornecidos e fontes locais. Sem dependências de produção ou framework. Hospedado no GitHub Pages com o domínio [livialopesmakeup.com.br](https://livialopesmakeup.com.br/).
 
 ## Rodar localmente
 
@@ -25,7 +25,7 @@ O build apenas copia os arquivos públicos para `dist/`. A pasta contém tudo qu
 - Home com experiências acessíveis por teclado e links para páginas completas de noivas, debutantes e maquiagem social.
 - Apresentação da Lívia e seção do curso presencial de automaquiagem.
 - Página própria do curso presencial de automaquiagem e navegação entre experiências.
-- [Galeria](https://jiyuhenko.github.io/siteLivia/galeria.html) com 24 fotos reais, filtros por categoria, ampliação e navegação por setas.
+- [Galeria](https://livialopesmakeup.com.br/galeria.html) com 24 fotos reais, filtros por categoria, ampliação e navegação por setas.
 - Menu responsivo, perguntas frequentes, endereço e mapa Google integrado com link para traçar a rota.
 - Ícones vetoriais para WhatsApp, Instagram, localização e contato; sem glifos decorativos ou emojis dependentes da plataforma.
 - Formulário que prepara uma mensagem para o WhatsApp enquanto a integração Google estiver desativada.
@@ -70,9 +70,9 @@ Não há workflows próprios em `.github/workflows`, nem Actions necessárias pa
 
 Qualquer hospedagem de arquivos estáticos serve o conteúdo de `dist/`. Para testar a pasta de produção localmente, use `node scripts/serve.mjs --dist` com a outra prévia parada ou em outra porta. Em hospedagens com configuração de build, o comando é `npm run build` e o diretório de publicação é `dist`.
 
-Concentre as alterações, execute a geração e as verificações localmente e faça um único push quando estiverem prontas. A configuração da antiga prévia privada foi removida a pedido do proprietário; este repositório usa GitHub Pages. Nenhum domínio ou serviço pago foi contratado.
+Concentre as alterações, execute a geração e as verificações localmente e faça um único push quando estiverem prontas. Este repositório usa GitHub Pages. O domínio personalizado está no arquivo `CNAME`; a zona DNS é administrada no Registro.br. Para o endereço com `www`, use um CNAME DNS apontando para `jiyuhenko.github.io`, sem `/siteLivia`.
 
-Os metadados usam `https://jiyuhenko.github.io/siteLivia/`. Ao mudar de endereço, atualize `url` em `config.js`, execute `npm run pages` e ajuste a linha `Sitemap` de `robots.txt`. No Apps Script, `SITE_ORIGIN` é somente a origem: para esse endereço, use `https://jiyuhenko.github.io`, sem `/siteLivia`. Os caminhos de arquivos são relativos para preservar o funcionamento na subpasta do GitHub Pages.
+Os metadados usam `https://livialopesmakeup.com.br/`. Ao mudar de endereço, atualize o `CNAME`, `url` em `config.js` e a linha `Sitemap` de `robots.txt`, e execute `npm run pages`. No Apps Script, use `https://livialopesmakeup.com.br` como `SITE_ORIGIN`, sem barra final. Os caminhos de arquivos são relativos.
 
 [Veja o registro da verificação local e os limites dos testes](docs/VALIDACAO.md).
 

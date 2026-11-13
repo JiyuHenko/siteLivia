@@ -12,5 +12,5 @@ console.log(`Diretório verificado para a compilação: ${output}`);
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 const publicFiles = (await readdir('.')).filter((name) => /\.(html|css|js)$/.test(name));
-for (const file of [...publicFiles, 'assets', 'robots.txt', 'sitemap.xml', '.nojekyll']) await cp(file, resolve(output, file), { recursive: true });
+for (const file of [...publicFiles, 'assets', 'robots.txt', 'sitemap.xml', '.nojekyll', 'CNAME']) await cp(file, resolve(output, file), { recursive: true });
 console.log('Site estático pronto em dist/. Nenhum GitHub Action executado.');
