@@ -67,6 +67,10 @@ dialog{border:0;color:var(--ink);background:var(--paper);padding:55px;width:calc
   width: clamp(132px, 12vw, 146px);
   height: auto;
 }
+.footer-bottom .custom-mind > span {
+  color: var(--muted);
+  letter-spacing: normal;
+}
 .custom-mind:hover > span {
   text-decoration: underline;
   text-underline-offset: .25em;
