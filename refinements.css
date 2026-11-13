@@ -2,13 +2,27 @@
 svg { pointer-events: none; }
 .button-outline { border: 1px solid var(--ink); color: var(--ink); }
 .button-outline:hover { background: var(--ink); color: var(--paper); }
+/* Keep the portrait's intrinsic height from expanding the cover's grid row. */
+.hero { grid-template-rows: minmax(0, 1fr); }
+.hero-visual { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; }
 .hero-divider { display: inline-block; width: 20px; height: 1px; background: currentColor; opacity: .55; }
-.hero-image-wrap { height: calc(100% - 56px); }
+.hero-image-wrap { height: auto; min-height: 0; }
 .hero-image-note { min-height: 56px; margin: 0; align-items: center; gap: 18px; }
 .hero-image-note > span { font-size: 9px; letter-spacing: .1em; line-height: 1.6; }
 .hero-author { display: inline-flex; align-items: center; gap: 16px; padding: 12px 0 12px 12px; font-size: 12px; letter-spacing: 0; white-space: nowrap; }
 .hero-author svg { width: 18px; height: 18px; transition: transform .3s var(--ease); }
 .hero-author:hover svg { transform: translate(2px,-2px); }
+@media (min-width: 561px) {
+  .hero-copy { min-height: 0; padding-block: 44px 56px; }
+  .hero-copy > .eyebrow { margin-bottom: clamp(20px, 3.4svh, 34px); }
+  .hero-bottom { margin-top: clamp(22px, 3.2svh, 34px); }
+  .hero-scroll { margin-top: clamp(24px, 4svh, 39px); }
+  .hero-image { object-position: 50% 16%; }
+}
+@media (min-width: 1101px) {
+  .hero h1 { font-size: clamp(90px, min(8.8vw, 17.8svh), 156px); }
+  .hero-image { object-position: 50% top; }
+}
 .manifesto-signature { width: 38px; height: 43px; object-fit: contain; }
 .detail-list li::before { content: ''; width: 4px; height: 4px; background: var(--olive); border-radius: 50%; flex-shrink: 0; }
 .experience-content > .experience-learn { display: flex; width: fit-content; font-size: 11px; color: var(--muted); margin-top: 12px; }
@@ -22,13 +36,15 @@ svg { pointer-events: none; }
 .form-status a svg { width: 15px; height: 15px; vertical-align: middle; }
 
 /* The experience menu works by click, keyboard and touch. */
+.desktop-nav { gap: clamp(26px, 3.25vw, 50px); }
+.desktop-nav > a, .nav-experiences summary { font-size: clamp(14px, 1.05vw, 16px); white-space: nowrap; }
 .nav-experiences { position: relative; }
-.nav-experiences summary { display: flex; align-items: center; min-height: 44px; list-style: none; font-size: 12px; cursor: pointer; }
+.nav-experiences summary { display: flex; align-items: center; min-height: 44px; list-style: none; cursor: pointer; }
 .nav-experiences summary::-webkit-details-marker { display: none; }
 .nav-experiences summary svg { width: 15px; height: 15px; margin-left: 6px; transition: transform .25s; }
 .nav-experiences[open] summary svg { transform: rotate(180deg); }
-.experience-dropdown { position: absolute; top: calc(100% + 10px); left: -24px; width: 250px; padding: 12px 24px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 15px 35px #27292312; }
-.experience-dropdown a { display: flex; align-items: center; justify-content: space-between; min-height: 49px; font-size: 12px; border-bottom: 1px solid var(--line); }
+.experience-dropdown { position: absolute; top: calc(100% + 10px); left: -24px; width: 270px; padding: 12px 24px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 15px 35px #27292312; }
+.experience-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 55px; font-size: 14px; border-bottom: 1px solid var(--line); }
 .experience-dropdown a:last-child { border: 0; }
 .experience-dropdown a::after { display: none; }
 .experience-dropdown svg { width: 16px; height: 16px; }
@@ -38,10 +54,10 @@ svg { pointer-events: none; }
 .header-cta::after { width: 100%; }
 .header-cta:hover > svg { transform: none; }
 .mobile-services { display: grid; grid-template-columns: 1fr 1fr; gap: 0 25px; }
-.mobile-nav .mobile-services a { font-size: 25px; min-height: 56px; padding: 14px 0; }
+.mobile-nav .mobile-services a { gap: 6px; font-size: 27px; min-height: 60px; padding: 15px 0; }
 .mobile-services svg { width: 17px; height: 17px; }
 .mobile-nav:not([hidden]) { max-height: calc(100svh - 86px); overflow-y: auto; overscroll-behavior: contain; }
-.mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 29px; min-height: 57px; padding: 14px 0; }
+.mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 31px; min-height: 63px; padding: 16px 0; }
 .mobile-nav p { margin-top: 24px; }
 
 /* The image moves within its own clipped, oversized layer, including on iOS. */
@@ -112,7 +128,6 @@ svg { pointer-events: none; }
   .hero-image-note > span { width: 100%; line-height: 1.5; font-size: 7px; }
   .hero-author { padding: 4px 0 0; min-height: 28px; }
   .hero-author svg { width: 15px; height: 15px; }
-  .hero-image-wrap { height: calc(100% - 62px); }
   .hero-image-note { min-height: 62px; }
   .studio { gap: 5%; grid-template-columns: 1fr 1.1fr; }
   .studio h2 { font-size: 54px; }
@@ -144,11 +159,10 @@ svg { pointer-events: none; }
   .header-cta > svg { width: 19px; height: 19px; }
   .menu-toggle { width: 44px; height: 44px; padding: 11px; }
   .mobile-nav:not([hidden]) { max-height: calc(100svh - 78px); padding-top: 14px; padding-bottom: 28px; }
-  .mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 27px; min-height: 54px; padding: 12px 0; }
-  .mobile-nav .mobile-services a { font-size: 24px; }
+  .mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 29px; min-height: 60px; padding: 14px 0; }
+  .mobile-nav .mobile-services a { font-size: clamp(24px, 6.5vw, 27px); }
   .hero-copy > .eyebrow { display: flex; gap: 14px; }
   .hero-divider { width: 18px; }
-  .hero-image-wrap { height: calc(100% - 60px); }
   .hero-visual { padding-bottom: 0; height: 480px; }
   .hero-image-note { justify-content: space-between; flex-wrap: nowrap; min-height: 60px; gap: 12px; }
   .hero-image-note > span { width: auto; font-size: 8px; max-width: 130px; letter-spacing: .06em; }
@@ -207,6 +221,8 @@ svg { pointer-events: none; }
   .header .brand { width: 114px; }
   .header { padding-left: 18px; padding-right: 18px; gap: 7px; }
   .header-cta { font-size: 8px; gap: 5px; }
+  .mobile-services { column-gap: 14px; }
+  .mobile-nav .mobile-services a { font-size: 23px; }
   .contact-whatsapp { padding: 18px 15px; gap: 12px; }
   .contact-whatsapp > span { font-size: 12px; }
   .contact-whatsapp > svg:last-child { width: 16px; }
