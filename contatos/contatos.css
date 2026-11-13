@@ -160,11 +160,12 @@
 .bio-map iframe { display: block; width: 100%; height: clamp(252px, 29vw, 345px); border: 0; }
 
 .bio-footer {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
+  display: flex; flex-direction: column; align-items: center;
   margin-top: 27px; color: var(--bio-muted); font-size: 11px;
 }
-.bio-footer img { width: 20px; height: auto; }
-.bio-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+.bio-footer-social img { width: 20px; height: auto; }
+.bio-footer a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; }
+.bio-footer .custom-mind { font-size: inherit; letter-spacing: normal; }
 .bio-footer a:hover { text-decoration: underline; text-underline-offset: .25em; }
 
 @media (max-width: 740px) {
