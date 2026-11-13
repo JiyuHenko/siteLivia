@@ -40,7 +40,7 @@ function swing(time) {
 }
 
 function nudgeTag(impulse) {
-  const maxVelocity = narrowScreen.matches ? 82 : 110;
+  const maxVelocity = narrowScreen.matches ? 94 : 124;
   velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity + impulse));
   if (!frame) frame = window.requestAnimationFrame(swing);
 }
@@ -54,14 +54,14 @@ function pushTagFromScroll() {
   const { top, bottom } = tag.getBoundingClientRect();
   if (bottom <= 0 || top >= window.innerHeight) return;
 
-  nudgeTag(distance * 2.5);
+  nudgeTag(distance * 2.8);
 }
 
 function pushTagFromPointer(event) {
   if (!motion.matches) return;
   const { left, width } = anchor.getBoundingClientRect();
   const direction = event.clientX < left + width / 2 ? -1 : 1;
-  nudgeTag(direction * 80);
+  nudgeTag(direction * 92);
 }
 
 anchor.addEventListener('pointerenter', (event) => {
