@@ -42,11 +42,13 @@
   position: absolute;
   right: -20px;
   bottom: 2%;
-  margin-bottom: -6px;
+  margin-bottom: -24px;
   width: 22%;
   pointer-events: none;
-  touch-action: manipulation;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
+.bio-tag-handle { display: none; }
 .bio-tag-anchor::after {
   content: "";
   position: absolute;
@@ -114,14 +116,25 @@
   height: auto;
 }
 @media (prefers-reduced-motion: no-preference) {
-  /* The hit area stays still while the label swings under the pointer. */
-  .bio-tag-anchor::before {
-    content: "";
+  /* Keep a stable target for taps and also let the moving card be grabbed. */
+  .bio-tag-handle {
+    display: block;
     position: absolute;
     inset: 23% -4px -4px;
     z-index: 1;
-    pointer-events: auto;
+    padding: 0;
+    border-radius: 4px;
   }
+  .bio-tag-handle, .bio-portrait-mark {
+    pointer-events: auto;
+    touch-action: pan-y pinch-zoom;
+    cursor: grab;
+  }
+  .bio-tag-anchor.is-dragging .bio-tag-handle,
+  .bio-tag-anchor.is-dragging .bio-portrait-mark {
+    cursor: grabbing;
+  }
+  .bio-portrait-mark img { pointer-events: none; }
   .bio-tag-pendulum { transform: rotate(calc(-4deg + var(--bio-tag-swing, 0deg))); }
   .bio-portrait-mark { transform: perspective(300px) rotateY(calc(var(--bio-tag-depth) + var(--bio-tag-swing, 0deg) * .5)); }
 }
@@ -269,12 +282,24 @@
   .bio-profile {
     grid-template-columns: minmax(0, .88fr) minmax(0, 1fr);
     gap: clamp(12px, 4.5vw, 25px); align-items: center;
-    margin: 0 0 30px; padding: 0 2px 27px; border-bottom: 1px solid var(--bio-line);
+    margin: 0 0 30px; padding: 0 2px 37px; border-bottom: 1px solid var(--bio-line);
   }
   .bio-portrait { width: min(100%, 190px); aspect-ratio: 5 / 6; }
   .bio-tag-anchor { right: -5px; bottom: 0; }
-  .bio-tag-anchor::after { box-shadow: inset 0 0 0 1px #9c876b, 0 1px 2px #30251b40; }
-  .bio-tag-pendulum::after { box-shadow: 0 1px 2px #30251b40; }
+  .bio-tag-anchor::after {
+    width: 3.5px;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(125deg, #917858 18%, #d8c6a6 39%, #b9a383 58%, #756149 80%);
+    box-shadow: 0 .5px 1px #30251b54;
+    transform: translate(-50%, -50%) rotate(-23deg);
+  }
+  .bio-tag-pendulum::after {
+    width: 1.5px;
+    background:
+      repeating-linear-gradient(148deg, #49392b28 0 .45px, #e9dabb65 .5px .95px, transparent 1px 1.6px),
+      linear-gradient(to right, #948069, #cfba96 48%, #8a755c);
+    box-shadow: .5px .5px 1px #30251b42;
+  }
   .bio-portrait-mark {
     --bio-tag-depth: -8deg;
     background: linear-gradient(155deg, #fffcf6, #f0e7d8);
