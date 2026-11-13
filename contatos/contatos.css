@@ -39,14 +39,42 @@
   object-position: 50% 20%;
 }
 .bio-portrait-mark {
+  --bio-tag-rotation: -5deg;
   position: absolute;
   right: -20px;
   bottom: 5%;
+  display: grid;
+  place-items: center;
   width: 22%;
+  aspect-ratio: 4 / 5;
+  padding: 4.4% 3.7% 2.9%;
+  background: linear-gradient(145deg, #fffcf5, #ede3d2);
+  border: 1px solid #cbbca7;
+  border-radius: 3px;
+  box-shadow: inset 0 1px #fff8, 1px 2px #bdae97, 3px 6px 12px #30251b42;
+  transform-origin: 42% 12%;
+  transform: perspective(300px) rotate(var(--bio-tag-rotation)) rotateY(-12deg);
+  pointer-events: none;
+}
+.bio-portrait-mark::before {
+  content: "";
+  position: absolute;
+  top: 7%;
+  left: 42%;
+  width: 7%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #b4a288;
+  box-shadow: inset 0 1px 2px #59483460, 0 1px #fff9;
+  transform: translateX(-50%);
+}
+.bio-portrait-mark img {
+  display: block;
+  width: 100%;
   height: auto;
-  padding: 3%;
-  background: var(--bio-card);
-  border: 1px solid var(--bio-line);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bio-portrait-mark { --bio-tag-rotation: calc(-5deg + var(--bio-tag-swing, 0deg)); }
 }
 .bio-intro { display: grid; justify-items: center; min-width: 0; text-align: center; padding-top: 23px; }
 .bio-kicker { margin: 0; font: 650 10px/1.45 var(--sans); text-transform: uppercase; letter-spacing: .16em; color: var(--bio-muted); }
@@ -195,10 +223,10 @@
     margin: 0 0 30px; padding: 0 2px 27px; border-bottom: 1px solid var(--bio-line);
   }
   .bio-portrait { width: min(100%, 190px); aspect-ratio: 5 / 6; }
-  .bio-portrait-mark { right: -12%; }
+  .bio-portrait-mark { right: -8px; }
   .bio-intro { padding-top: 0; }
   .bio-kicker { font-size: 9px; letter-spacing: .11em; }
-  .bio-logo { margin: 8px 0 0; }
+  .bio-logo { margin: 8px 0 0; transform: translateX(clamp(5px, 10vw - 27px, 12px)); }
   .bio-logo img { width: min(100%, 151px); }
   .bio-intro p { font-size: 11px; line-height: 1.4; margin: 2px 0 8px; }
   .bio-social { flex-wrap: nowrap; gap: 6px; }
@@ -233,7 +261,7 @@
 @media (max-width: 360px) {
   .bio-page { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
   .bio-profile { gap: 10px; }
-  .bio-portrait-mark { bottom: 0; }
+  .bio-portrait-mark { right: 0; bottom: 0; }
   .bio-service-title { font-size: 23px; }
   .bio-service-main { gap: 7px; }
   .bio-thumb { width: 37px; height: 48px; }
