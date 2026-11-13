@@ -40,7 +40,7 @@
 }
 .bio-portrait-mark {
   position: absolute;
-  right: -12px;
+  right: -20px;
   bottom: 5%;
   width: 22%;
   height: auto;
@@ -195,7 +195,7 @@
     margin: 0 0 30px; padding: 0 2px 27px; border-bottom: 1px solid var(--bio-line);
   }
   .bio-portrait { width: min(100%, 190px); aspect-ratio: 5 / 6; }
-  .bio-portrait-mark { right: -5px; }
+  .bio-portrait-mark { right: -10px; }
   .bio-intro { padding-top: 0; }
   .bio-kicker { font-size: 9px; letter-spacing: .11em; }
   .bio-logo { margin: 8px 0 0; }
