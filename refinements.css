@@ -50,7 +50,7 @@ svg { pointer-events: none; }
 .experience-dropdown svg { width: 16px; height: 16px; }
 .experience-dropdown a:hover { color: #747767; }
 .header-cta { gap: 10px; }
-.header-cta > svg { width: 21px; height: 21px; }
+.header-cta > svg { width: 25px; height: 25px; }
 .header-cta::after { width: 100%; }
 .header-cta:hover > svg { transform: none; }
 .mobile-services { display: grid; grid-template-columns: 1fr 1fr; gap: 0 25px; }
@@ -60,9 +60,14 @@ svg { pointer-events: none; }
 .mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 31px; min-height: 63px; padding: 16px 0; }
 .mobile-nav p { margin-top: 24px; }
 
-/* The image moves within its own clipped, oversized layer, including on iOS. */
-.interlude { isolation: isolate; }
-.interlude > .parallax-image { top: -90px; left: 0; height: calc(100% + 180px); max-width: none; width: 100%; transform: translate3d(0, var(--parallax-y, 0px), 0); object-position: 50% 45%; backface-visibility: hidden; }
+/* Keep the photo, contrast layer and copy in separate planes, including on iOS. */
+.interlude { --parallax-travel: clamp(98px, 10vw, 152px); --parallax-bleed: calc(var(--parallax-travel) + 12px); isolation: isolate; background: #282820; }
+.interlude > .parallax-image { z-index: 0; top: calc(0px - var(--parallax-bleed)); left: 0; height: calc(100% + var(--parallax-bleed) + var(--parallax-bleed)); max-width: none; width: 100%; transform: translate3d(0, calc(var(--parallax-travel) * var(--parallax-progress, 0)), 0); object-position: 50% 45%; filter: none; backface-visibility: hidden; }
+.interlude-shade { z-index: 1; pointer-events: none; background: linear-gradient(0deg, #17171175, transparent 25%), linear-gradient(90deg, #10110d92, #13140f78 50%, #10110d92); }
+.interlude-copy, .interlude-foot { z-index: 2; text-shadow: 0 2px 14px #151510b3; }
+@media (max-width: 800px) {
+  .interlude { --parallax-travel: clamp(72px, 18vw, 104px); }
+}
 .faq { align-items: start; }
 @media (min-width: 801px) {
   .faq-intro { position: -webkit-sticky; position: sticky; top: 48px; align-self: start; margin: 0; }
@@ -156,7 +161,7 @@ svg { pointer-events: none; }
 @media (max-width: 560px) {
   .header { gap: 12px; }
   .header-cta { gap: 8px; font-size: 9px; }
-  .header-cta > svg { width: 19px; height: 19px; }
+  .header-cta > svg { width: 22px; height: 22px; }
   .menu-toggle { width: 44px; height: 44px; padding: 11px; }
   .mobile-nav:not([hidden]) { max-height: calc(100svh - 78px); padding-top: 14px; padding-bottom: 28px; }
   .mobile-nav:not([hidden]) > a, .mobile-nav:not([hidden]) > button { font-size: 29px; min-height: 60px; padding: 14px 0; }
@@ -229,8 +234,8 @@ svg { pointer-events: none; }
   .map-caption > span { font-size: 6px; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .interlude > .parallax-image { will-change: transform; }
+  .interlude.is-parallax-active > .parallax-image { will-change: transform; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .interlude > .parallax-image { transform: none !important; }
+  .interlude > .parallax-image { top: 0; height: 100%; transform: none; }
 }

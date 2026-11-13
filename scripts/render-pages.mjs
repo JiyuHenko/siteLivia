@@ -36,6 +36,6 @@ for (const file of pageFiles) {
   const output = `<!doctype html>\n<html lang="pt-BR">\n<head>${head}</head>\n<body class="${escape(page.bodyClass || '')}"${services[file] ? ` data-service="${services[file]}"` : ''}>${homeAnchors(sharedHeader)}  <main id="conteudo">\n${body.trim()}\n  </main>\n${homeAnchors(sharedFooter)}</body>\n</html>\n`;
   await writeFile(file, output);
 }
-const urls = ['', ...pageFiles].map((file) => `  <url><loc>${base}${file}</loc></url>`).join('\n');
+const urls = ['', ...pageFiles, 'contatos/'].map((file) => `  <url><loc>${base}${file}</loc></url>`).join('\n');
 await writeFile('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 console.log(`${pageFiles.length} páginas estáticas atualizadas para GitHub Pages.`);

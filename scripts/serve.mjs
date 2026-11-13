@@ -12,7 +12,14 @@ const server = http.createServer(async (req, res) => {
     if ((path !== root && !path.startsWith(root + sep)) || /[\\/]\./.test(path.slice(root.length)) || /[\\/](?:integrations|docs|scripts|tests|node_modules)(?:[\\/]|$)/.test(path.slice(root.length))) {
       res.writeHead(404); res.end('Not found'); return;
     }
-    if ((await stat(path)).isDirectory()) path = resolve(path, 'index.html');
+    if ((await stat(path)).isDirectory()) {
+      if (!url.pathname.endsWith('/')) {
+        res.writeHead(308, { Location: `${url.pathname.replace(/^\/+/, '/')}/${url.search}` });
+        res.end();
+        return;
+      }
+      path = resolve(path, 'index.html');
+    }
     const data = await readFile(path);
     res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
     if (req.method === 'HEAD') res.end(); else res.end(data);

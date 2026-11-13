@@ -26,6 +26,7 @@ O build apenas copia os arquivos públicos para `dist/`. A pasta contém tudo qu
 - Apresentação da Lívia e seção do curso presencial de automaquiagem.
 - Página própria do curso presencial de automaquiagem e navegação entre experiências.
 - [Galeria](https://livialopesmakeup.com.br/galeria.html) com 24 fotos reais, filtros por categoria, ampliação e navegação por setas.
+- [Contatos](https://livialopesmakeup.com.br/contatos/) para o link da bio: página estática com WhatsApp por serviço e atalhos para as páginas completas.
 - Menu responsivo, perguntas frequentes, endereço e mapa Google integrado com link para traçar a rota.
 - Ícones vetoriais para WhatsApp, Instagram, localização e contato; sem glifos decorativos ou emojis dependentes da plataforma.
 - Formulário que prepara uma mensagem para o WhatsApp enquanto a integração Google estiver desativada.
@@ -39,6 +40,7 @@ Solicitar um horário nunca é apresentado como confirmação de reserva. A mens
 | Arquivo | Conteúdo |
 | --- | --- |
 | `index.html` | Estrutura, textos, contatos, perguntas e metadados |
+| `contatos/index.html`, `contatos/contatos.css` | Página da bio, mensagens de WhatsApp e atalhos para serviços |
 | `pages/*.html` | Fragmentos editáveis das quatro experiências e da galeria |
 | `app.js` | Textos das três experiências, filtros, diálogos e formulário |
 | `styles.css`, `refinements.css` | Identidade visual, refinamentos, mapa, contato e movimentos |

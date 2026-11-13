@@ -1,0 +1,148 @@
+/* The manifesto is an editorial note between the cover and the experiences. */
+.home-manifesto.section-pad {
+  padding-block: clamp(30px, 4.2vw, 68px) 0;
+}
+
+.home-manifesto-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 82px);
+  padding: clamp(26px, 3vw, 46px) clamp(24px, 3.3vw, 56px);
+  border-block: 1px solid var(--line);
+  background: color-mix(in srgb, var(--cream), var(--paper) 62%);
+}
+
+.home-manifesto-statement {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 38px);
+}
+
+.home-manifesto-statement > img {
+  width: clamp(30px, 3.1vw, 45px);
+  height: auto;
+}
+
+.home-manifesto .eyebrow,
+.home-experiences-heading .eyebrow {
+  margin: 0 0 15px;
+  font-size: 11px;
+  letter-spacing: .15em;
+}
+
+.home-manifesto h2 {
+  font-size: clamp(28px, 3.05vw, 48px);
+  letter-spacing: -.045em;
+  line-height: 1.08;
+  text-wrap: pretty;
+}
+
+.home-manifesto-copy > p {
+  max-width: 45ch;
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.home-manifesto-copy > .text-link {
+  min-height: 44px;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.home-manifesto-copy > .text-link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.home-manifesto-copy > .text-link::after {
+  width: calc(100% - 33px);
+}
+
+.home-experiences.section-pad {
+  padding-top: clamp(54px, 6vw, 96px);
+}
+
+.home-experiences-heading {
+  margin-bottom: clamp(28px, 3.3vw, 50px);
+}
+
+.home-experiences-heading h2 {
+  font-size: clamp(52px, 6vw, 96px);
+  line-height: .98;
+}
+
+.home-experiences-heading h2 > span {
+  display: inline-block;
+}
+
+.home-experiences .experience-tabs button:not([aria-selected=true]):not(:hover) {
+  color: var(--muted);
+}
+
+@media (max-width: 730px) {
+  .home-manifesto-inner {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .home-manifesto-copy {
+    margin-left: clamp(46px, 7vw, 64px);
+  }
+}
+
+@media (max-width: 560px) {
+  .home-manifesto-inner {
+    padding: 24px 18px 20px;
+    gap: 16px;
+  }
+
+  .home-manifesto-statement {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .home-manifesto-statement > img {
+    width: 27px;
+  }
+
+  .home-manifesto h2 {
+    font-size: clamp(28px, 8.1vw, 40px);
+  }
+
+  .home-manifesto-copy {
+    margin-left: 0;
+  }
+
+  .home-experiences-heading .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .home-experiences-heading h2 {
+    font-size: clamp(47px, 12vw, 61px);
+  }
+
+  .home-experiences .experience-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-experiences .experience-tabs button {
+    display: block;
+    padding: 11px 0 13px;
+    min-height: 58px;
+    font-size: clamp(18px, 5.8vw, 23px);
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .home-experiences .experience-tabs button > span {
+    display: block;
+    margin: 0 0 5px;
+    font-size: 9px;
+  }
+}

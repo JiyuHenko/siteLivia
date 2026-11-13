@@ -1,0 +1,109 @@
+.bio-body {
+  background: #e9e5da;
+  color: var(--ink);
+}
+
+.bio-page {
+  max-width: 1230px;
+  margin-inline: auto;
+  padding: max(36px, env(safe-area-inset-top)) clamp(24px, 6vw, 82px) max(28px, env(safe-area-inset-bottom));
+}
+
+.bio-shell {
+  display: grid;
+  grid-template-columns: minmax(0, .94fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 84px);
+  align-items: center;
+  min-height: min(720px, calc(100svh - 115px));
+}
+
+.bio-profile { display: grid; justify-items: center; gap: 18px; }
+.bio-portrait {
+  width: min(100%, 310px);
+  aspect-ratio: 5 / 5.8;
+  overflow: hidden;
+  border: 1px solid rgb(39 41 35 / .22);
+  background: #b2ada2;
+}
+.bio-portrait img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 24%; }
+.bio-intro { display: grid; justify-items: center; min-width: 0; text-align: center; }
+.bio-kicker { font: 650 10px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .16em; color: #54574c; }
+.bio-logo { margin: 13px 0 6px; }
+.bio-logo img { display: block; width: clamp(134px, 15vw, 178px); height: auto; }
+.bio-intro p { margin: 2px 0 10px; font-size: 13px; color: #505348; }
+.bio-social { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.bio-social a {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgb(39 41 35 / .24);
+  border-radius: 50%;
+  transition: background-color .2s, border-color .2s, color .2s;
+}
+.bio-page svg { pointer-events: none; }
+.bio-social svg { width: 20px; height: 20px; }
+.bio-social a:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.bio-experiences h2 { font: 500 clamp(35px, 4vw, 61px)/.98 var(--serif); letter-spacing: -.055em; margin: 0 0 10px; }
+.bio-section-note { margin: 0 0 23px; color: #505348; font-size: 13px; line-height: 1.55; }
+.bio-list { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.bio-service {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 72px;
+  background: var(--paper);
+  border: 1px solid rgb(39 41 35 / .22);
+}
+.bio-service a, .bio-site { transition: background-color .2s, color .2s; }
+.bio-service a:hover { background: #fffdf7; }
+.bio-service-main { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: clamp(9px, 1.1vw, 16px); align-items: center; padding: 8px 13px 8px 8px; }
+.bio-thumb { display: block; width: 48px; height: 54px; object-fit: cover; object-position: 50% 29%; background: #d0c8bc; }
+.bio-service-copy, .bio-site > span { display: grid; gap: 3px; }
+.bio-service-title { font: 650 clamp(22px, 2.5vw, 28px)/1.02 var(--serif); letter-spacing: -.026em; }
+.bio-service-action { color: #4e5146; font-size: 11px; line-height: 1.28; }
+.bio-service-icon { width: 20px; height: 20px; }
+.bio-service-more { display: grid; gap: 4px; align-content: center; justify-items: center; min-width: 62px; padding: 7px 6px; border-inline-start: 1px solid rgb(39 41 35 / .15); }
+.bio-service-more svg { width: 17px; height: 17px; }
+.bio-service-more span { font-size: 10px; font-weight: 650; line-height: 1.2; }
+
+.bio-site { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 76px; margin-top: 17px; padding: 10px 19px; background: var(--ink); color: var(--paper); }
+.bio-site:hover { background: #464a3d; }
+.bio-site-label { font: 550 clamp(23px, 2.8vw, 30px)/1.08 var(--serif); letter-spacing: -.028em; }
+.bio-site-note { font-size: 11px; color: #e5e2d8; }
+.bio-site svg { flex: 0 0 23px; width: 23px; height: 23px; }
+
+.bio-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 5px 14px; margin-top: 26px; font-size: 11px; color: #56594e; }
+.bio-footer > span { height: 1px; width: 14px; background: currentColor; opacity: .55; }
+.bio-footer a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.bio-page a:focus-visible { position: relative; z-index: 1; outline: 2px solid #343930; outline-offset: 2px; }
+
+@media (max-width: 740px) {
+  .bio-page { max-width: 520px; padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right)); padding-top: max(25px, env(safe-area-inset-top)); }
+  .bio-shell { display: block; min-height: auto; }
+  .bio-profile { grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); gap: clamp(13px, 4vw, 22px); align-items: center; padding-bottom: 24px; margin-bottom: 23px; border-bottom: 1px solid rgb(39 41 35 / .24); }
+  .bio-portrait { width: 100%; }
+  .bio-kicker { font-size: 9px; letter-spacing: .09em; }
+  .bio-logo { margin: 9px 0 2px; }
+  .bio-logo img { width: min(100%, 148px); }
+  .bio-intro p { font-size: 11px; line-height: 1.5; margin: 1px 0 9px; }
+  .bio-social { gap: 7px; }
+  .bio-social svg { width: 18px; height: 18px; }
+  .bio-experiences h2 { font-size: clamp(32px, 8.7vw, 44px); margin-bottom: 7px; }
+  .bio-section-note { margin-bottom: 14px; font-size: 12px; }
+  .bio-service-main { padding-right: 10px; }
+  .bio-service-icon { width: 18px; height: 18px; }
+  .bio-site { margin-top: 13px; min-height: 68px; }
+  .bio-footer { margin-top: 18px; }
+}
+
+@media (max-width: 360px) {
+  .bio-page { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
+  .bio-thumb { width: 39px; height: 51px; }
+  .bio-service-more { min-width: 53px; }
+  .bio-service-title { font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bio-page a { transition: none; }
+}

@@ -237,7 +237,7 @@ function updateBookingMode() {
   bookingForm.elements.date.required = !course;
   bookingForm.elements.time.required = !course;
   $('#submit-label').textContent = usesOnlineBooking() ? 'Solicitar meu horário' : 'Continuar no WhatsApp';
-  $('.submit-button svg use')?.setAttribute('href', usesOnlineBooking() ? '#arrow' : '#whatsapp');
+  $('.submit-button svg use')?.setAttribute('href', usesOnlineBooking() ? '#arrow' : './assets/brand-icons.svg#whatsapp');
   $('#booking-notice').textContent = usesOnlineBooking()
     ? 'Esta é uma solicitação de pré-agendamento. A data e o horário dependem da confirmação pessoal da Lívia.'
     : course
@@ -280,7 +280,7 @@ function showResult(title, text, url) {
   result.hidden = false;
   $('h3', result).innerHTML = title;
   $('#booking-result-text').textContent = text;
-  $('.result-symbol', result).innerHTML = `<svg aria-hidden="true"><use href="#${url ? 'whatsapp' : 'check'}"/></svg>`;
+  $('.result-symbol', result).innerHTML = `<svg aria-hidden="true"><use href="${url ? './assets/brand-icons.svg#whatsapp' : '#check'}"/></svg>`;
   $('.whatsapp-reopen', result)?.remove();
   if (url) {
     const link = document.createElement('a');
@@ -412,8 +412,7 @@ bookingForm.addEventListener('submit', async (event) => {
 updateBookingMode();
 $('#year').textContent = new Date().getFullYear();
 
-// A translated image layer gives Safari the same motion as desktop browsers.
-// Only visible sections are measured, and reduced motion always gets a still image.
+// Move only the oversized photo layer; the type and its shade stay with the section.
 const parallaxSections = $$('[data-parallax]');
 if (parallaxSections.length) {
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -422,15 +421,15 @@ if (parallaxSections.length) {
   const paintParallax = () => {
     scheduledFrame = 0;
     if (motionPreference.matches) {
-      parallaxSections.forEach((section) => section.style.removeProperty('--parallax-y'));
+      parallaxSections.forEach((section) => section.style.removeProperty('--parallax-progress'));
       return;
     }
     const viewportHeight = window.innerHeight;
-    const distance = window.innerWidth <= 560 ? 90 : 150;
     activeSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
-      const progress = Math.max(-0.5, Math.min(0.5, (viewportHeight / 2 - rect.top - rect.height / 2) / (viewportHeight + rect.height)));
-      section.style.setProperty('--parallax-y', `${(progress * distance).toFixed(2)}px`);
+      const travelWindow = Math.max(1, (viewportHeight + rect.height) * 0.5);
+      const progress = Math.max(-1, Math.min(1, (viewportHeight * 0.5 - rect.top - rect.height * 0.5) / travelWindow));
+      section.style.setProperty('--parallax-progress', progress.toFixed(4));
     });
   };
   const scheduleParallax = () => {
@@ -438,13 +437,23 @@ if (parallaxSections.length) {
   };
   if ('IntersectionObserver' in window) {
     const visibility = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => isIntersecting ? activeSections.add(target) : activeSections.delete(target));
+      entries.forEach(({ target, isIntersecting }) => {
+        target.classList.toggle('is-parallax-active', isIntersecting);
+        if (isIntersecting) activeSections.add(target);
+        else activeSections.delete(target);
+      });
       scheduleParallax();
     }, { rootMargin: '150px' });
     parallaxSections.forEach((section) => visibility.observe(section));
-  } else parallaxSections.forEach((section) => activeSections.add(section));
-  window.addEventListener('scroll', scheduleParallax, { passive: true });
-  window.addEventListener('resize', scheduleParallax, { passive: true });
+  } else parallaxSections.forEach((section) => {
+    activeSections.add(section);
+    section.classList.add('is-parallax-active');
+  });
+  const scheduleWhenVisible = () => {
+    if (activeSections.size && !motionPreference.matches) scheduleParallax();
+  };
+  window.addEventListener('scroll', scheduleWhenVisible, { passive: true });
+  window.addEventListener('resize', scheduleWhenVisible, { passive: true });
   motionPreference.addEventListener('change', scheduleParallax);
   scheduleParallax();
 }
