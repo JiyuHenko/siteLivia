@@ -42,8 +42,10 @@
   position: absolute;
   right: -20px;
   bottom: 2%;
+  margin-bottom: -6px;
   width: 22%;
   pointer-events: none;
+  touch-action: manipulation;
 }
 .bio-tag-anchor::after {
   content: "";

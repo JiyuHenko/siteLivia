@@ -24,7 +24,7 @@ function swing(time) {
   // A restoring force pulls the tag back toward rest while damping slows each pass.
   velocity += (-70 * angle - 7 * velocity) * elapsed;
   angle += velocity * elapsed;
-  const maxAngle = narrowScreen.matches ? 8 : 12;
+  const maxAngle = narrowScreen.matches ? 12 : 15;
   if (Math.abs(angle) > maxAngle) {
     angle = Math.sign(angle) * maxAngle;
     velocity = 0;
@@ -39,8 +39,7 @@ function swing(time) {
   frame = window.requestAnimationFrame(swing);
 }
 
-function nudgeTag(impulse) {
-  const maxVelocity = narrowScreen.matches ? 94 : 124;
+function nudgeTag(impulse, maxVelocity = narrowScreen.matches ? 94 : 124) {
   velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity + impulse));
   if (!frame) frame = window.requestAnimationFrame(swing);
 }
@@ -57,20 +56,21 @@ function pushTagFromScroll() {
   nudgeTag(distance * 2.8);
 }
 
-function pushTagFromPointer(event) {
-  if (!motion.matches) return;
+function pointerDirection(event) {
   const { left, width } = anchor.getBoundingClientRect();
-  const direction = event.clientX < left + width / 2 ? -1 : 1;
-  nudgeTag(direction * 92);
+  return event.clientX < left + width / 2 ? -1 : 1;
 }
 
 anchor.addEventListener('pointerenter', (event) => {
-  if (event.pointerType === 'mouse') pushTagFromPointer(event);
+  if (motion.matches && event.pointerType === 'mouse') nudgeTag(pointerDirection(event) * 92);
 });
 anchor.addEventListener('pointerup', (event) => {
-  if (event.isPrimary && (event.pointerType === 'touch' || event.pointerType === 'pen')) {
-    pushTagFromPointer(event);
-  }
+  if (!motion.matches || !event.isPrimary || event.button !== 0) return;
+
+  // Add momentum in the current direction, or toward rest at a turning point.
+  const direction = Math.abs(velocity) > 1 ? Math.sign(velocity) : -Math.sign(angle) || pointerDirection(event);
+  const impulse = frame ? 57 : 108;
+  nudgeTag(direction * impulse, narrowScreen.matches ? 192 : 220);
 });
 window.addEventListener('scroll', pushTagFromScroll, { passive: true });
 window.addEventListener('pageshow', resetSwing);
