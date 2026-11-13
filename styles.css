@@ -52,7 +52,6 @@ dialog{border:0;color:var(--ink);background:var(--paper);padding:55px;width:calc
   min-height: 44px;
   padding: 0 8px;
   color: var(--muted);
-  font-size: inherit;
 }
 .custom-mind {
   display: inline-flex;
@@ -60,8 +59,10 @@ dialog{border:0;color:var(--ink);background:var(--paper);padding:55px;width:calc
   gap: 10px;
   min-height: 44px;
   color: inherit;
-  font-size: 13px;
   letter-spacing: .035em;
+}
+.privacy-link, .custom-mind {
+  font-size: 13px;
 }
 .custom-mind img {
   width: clamp(132px, 12vw, 146px);
